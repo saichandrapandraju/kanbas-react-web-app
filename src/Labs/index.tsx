@@ -17,6 +17,31 @@ export default function Labs() {
         <Route path="Lab2" element={<Lab2 />} />
         <Route path="Lab3" element={<Lab3 />} />
       </Routes>
+
+      <table>
+        <tr>
+          <td width={100}>
+            GitHub Link:
+          </td>
+          <td>
+            <a id="wd-github" target="_blank" href="https://github.com/saichandrapandraju/kanbas-react-web-app">kanbas-react-web-app repository</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Full Name:
+          </td>
+          <td>
+            Sai Chandra Pandraju
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Section:
+          </td>
+          <td> 03 </td>
+        </tr>
+      </table>
     </div>
   );
 }
