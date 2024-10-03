@@ -1,0 +1,95 @@
+/* General styling for the modules container */
+.modules-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+/* Styling for the list of modules */
+.modules-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each module item styling */
+.module-item {
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+/* Styling for the module title */
+.module-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background-color: #e9ecef;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Icons in module and lesson titles */
+.icon {
+  margin-right: 10px;
+}
+
+/* Control buttons for modules and lessons */
+.module-control-buttons, .lesson-control-buttons {
+  /* display: flex; */
+  align-items: center;
+}
+
+/* Checkmark styling */
+.checkmark {
+  width: 15px;
+  height: 15px;
+  background-color: #28a745; /* Green color */
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+/* More options styling */
+.more-options {
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex; /* Ensure it's displayed properly */
+  align-items: center;
+}
+
+.more-options i {
+  font-size: 18px;
+  color: #6c757d;
+}
+
+/* Debugging visibility */
+.more-options i {
+  font-size: 18px;
+  color: #6c757d;
+  display: inline-block; /* Ensure it's visible */
+  visibility: visible; /* Ensure it's not hidden */
+  opacity: 1; /* Ensure full visibility */
+}
+
+/* Styling for the list of lessons */
+.lessons-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each lesson item styling */
+.lesson-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.lesson-item:last-child {
+  border-bottom: none; /* Remove bottom border for last lesson */
+}

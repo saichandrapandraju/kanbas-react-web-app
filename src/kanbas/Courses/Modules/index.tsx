@@ -1,66 +1,75 @@
+import React from 'react';
+import { BsGripVertical } from "react-icons/bs";
+import './Modules.css';  // Import the custom CSS file
+import GreenCheckmark from './GreenCheckmark';
+import ModuleControls from './ModuleControls';
+
+// Components for module and lesson control buttons
+function ModuleControlButtons() {
+  return (
+    <div className="module-control-buttons">
+      {/* <GreenCheckmark /> */}
+      <BsGripVertical className="icon" />
+      <span className="more-options">
+        <i className="fas fa-ellipsis-v"></i>
+      </span>
+    </div>
+  );
+}
+
+function LessonControlButtons() {
+  return (
+    <div className="lesson-control-buttons">
+      <GreenCheckmark />
+
+      <span className="more-options">
+      <i className="fas fa-ellipsis-v"></i>
+      </span>
+    </div>
+  );
+}
+
 export default function Modules() {
-    return (
-        <div>
-            {/* Implement Collapse All button, View Progress button, etc. */}
-            <button>Collapse All</button>
-            <button>View Progress</button>
-            <select id="wd-select-one-publish">
-                <option value="publish">Publish</option>
-                <option selected value="publishall">Publish All</option>
-            </select>
-            <button>+ Module</button>
+  return (
+    <div className="modules-container">
+        <div style={{ marginBottom: '1rem' }}>
+        <ModuleControls />
 
-            <ul id="wd-modules">
-                <li className="wd-module">
-                    <div className="wd-title">Week 1, Lecture 1 - Course Introduction, Syllabus, Agenda</div>
-                    <ul className="wd-lessons">
-                        <li className="wd-lesson">
-                            <span className="wd-title">LEARNING OBJECTIVES</span>
-                            <ul className="wd-content">
-                                <li className="wd-content-item">Introduction to the course</li>
-                                <li className="wd-content-item">Learn what is Web Development</li>
-                            </ul>
-                        </li>
-                        <li className="wd-lesson">
-                            <span className="wd-title">READING</span>
-                            <ul className="wd-content">
-                                <li className="wd-content-item">Full Stack Developer - Chapter 1 - Introduction</li>
-                                <li className="wd-content-item">Full Stack Developer - Chapter 2 - Creating User Interfaces</li>
-                            </ul>
-                        </li>
-                        <li className="wd-lesson">
-                            <span className="wd-title">SLIDES</span>
-                            <ul className="wd-content">
-                                <li className="wd-content-item">Introduction to Web Development</li>
-                                <li className="wd-content-item">Creating an HTTP server with Node.js</li>
-                                <li className="wd-content-item">Create a React Application</li>
-
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li className="wd-module">
-                    <div className="wd-title">Week 1, Lecture 2 - Formatting User Interfaces with HTML</div>
-                    <ul className="wd-lessons">
-                        <li className="wd-lesson">
-                            <span className="wd-title">LEARNING OBJECTIVES</span>
-                            <ul className="wd-content">
-                                <li className="wd-content-item">Learn how to create user interfaces with HTML</li>
-                                <li className="wd-content-item">Deploy the assignment to Netlify</li>
-                            </ul>
-                        </li>
-                        <li className="wd-lesson">
-                            <span className="wd-title">SLIDES</span>
-                            <ul className="wd-content">
-                                <li className="wd-content-item">Introduction to HTML and the DOM</li>
-                                <li className="wd-content-item">Formatting Web content</li>
-                                <li className="wd-content-item">Formatting content with Lists and Tables</li>
-
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
         </div>
-    );
+      <ul className="modules-list">
+        <li className="module-item">
+          <div className="module-title">
+            <BsGripVertical className="icon" />
+            Week 1
+            <ModuleControlButtons />
+          </div>
+          <ul className="lessons-list">
+            {['LEARNING OBJECTIVES', 'Introduction to the course', 'Learn what is Web Development', 'LESSON 1', 'LESSON 2'].map((lesson, index) => (
+              <li className="lesson-item" key={index}>
+                <BsGripVertical className="icon" />
+                {lesson}
+                <LessonControlButtons />
+              </li>
+            ))}
+          </ul>
+        </li>
+        <li className="module-item">
+          <div className="module-title">
+            <BsGripVertical className="icon" />
+            Week 2
+            <ModuleControlButtons />
+          </div>
+          <ul className="lessons-list">
+            {['LEARNING OBJECTIVES', 'LESSON 1', 'LESSON 2'].map((lesson, index) => (
+              <li className="lesson-item" key={index}>
+                <BsGripVertical className="icon" />
+                {lesson}
+                <LessonControlButtons />
+              </li>
+            ))}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  );
 }

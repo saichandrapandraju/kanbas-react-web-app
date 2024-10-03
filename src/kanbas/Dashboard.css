@@ -1,0 +1,62 @@
+#wd-dashboard {
+    padding: 20px;
+}
+
+#wd-dashboard-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#wd-dashboard-published {
+    margin-bottom: 20px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.grid-item {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ccc; /* Add a light gray border */
+    border-radius: 8px; /* Add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add shadow for better visual effect */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure link button stays at the bottom */
+    overflow: visible; /* Allow overflow for link visibility */
+    min-height: 380px; /* Ensure sufficient height for content */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+.card-img-top {
+    height: 160px;
+    object-fit: cover;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card-text {
+    flex-grow: 1; /* Allow card text to grow and push button down */
+}
+
+.btn {
+    margin-top: auto; /* Ensure button is at the bottom */
+}

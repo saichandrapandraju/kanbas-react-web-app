@@ -1,131 +1,40 @@
+import React from 'react';
 import { Link } from "react-router-dom";
+import './Dashboard.css'; // Import a separate CSS file for styling
+
 export default function Dashboard() {
+    const courses = [
+        { number: "CS1234", name: "React JS", image: "/images/reactjs.png", role: "Full Stack software developer" },
+        { number: "CS2345", name: "Database Management Systems", image: "/images/database.jpeg", role: "Database Engineer" },
+        { number: "CS3456", name: "Algorithms", image: "/images/algorithms.jpeg", role: "Algorithms Engineer" },
+        { number: "CS4567", name: "Machine Learning", image: "/images/ml.jpeg", role: "Machine Learning Engineer" },
+        { number: "CS5678", name: "Natural Language Processing", image: "/images/nlp.jpeg", role: "NLP Engineer" },
+        { number: "CS6789", name: "Parallel Data Processing", image: "/images/pdp.jpeg", role: "Data Engineer" },
+        { number: "CS7890", name: "Mobile Application Development", image: "/images/mad.jpeg", role: "Mobile App Developer" },
+        { number: "CS8901", name: "Security and Vulnerabilities", image: "/images/security.jpeg", role: "Security Engineer" }
+    ];
+
     return (
         <div id="wd-dashboard">
-            <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-            <h2 id="wd-dashboard-published">Published Courses (12)</h2> <hr />
-            <div id="wd-dashboard-courses">
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/1234/Home">
-                        <img src="/images/reactjs.png" width={200} />
-                        <div>
-                            <h5>
-                                CS1234 React JS
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
+            <h1 id="wd-dashboard-title">Dashboard</h1>
+            <hr />
+            <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
+            <hr />
+            <div className="grid-container">
+                {courses.map((course, index) => (
+                    <div key={index} className="grid-item">
+                        <div className="card">
+                            <img src={course.image} className="card-img-top" alt={course.name} />
+                            <div className="card-body">
+                                <h5 className="card-title">{course.number} {course.name}</h5>
+                                <p className="card-text">{course.role}</p>
+                                <Link to={`/Kanbas/Courses/${course.number}/Home`} className="btn btn-primary">
+                                    Go
+                                </Link>
+                            </div>
                         </div>
-                    </Link>
-                </div>
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/2345/Home">
-                        <img src="/images/database.jpeg" width={200} />
-                        <div>
-                            <h5>
-                                CS2345 Database Management Systems
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Database Engineer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-
-                </div>
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/3456/Home">
-                        <img src="/images/algorithms.jpeg" width={200} />
-                        <div>
-                            <h5>
-                                CS3456 Algorithms
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Algorithms Engineer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/4567/Home">
-                        <img src="/images/ml.jpeg" width={200} />
-                        <div>
-                            <h5>
-                                CS4567 Machine Learning
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Machine Learning Engineer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/5678/Home">
-                        <img src="/images/nlp.jpeg" width={200} />
-                        <div>
-                            <h5>
-                                CS5678 Natural Language Processing
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Natural Language Processing Engineer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/6789/Home">
-                        <img src="/images/pdp.jpeg" width={200} />
-                        <div>
-                            <h5>
-                                CS6789 Parallel Data Processing
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Data Engineer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/7890/Home">
-                        <img src="/images/mad.jpeg" width={200} />
-                        <div>
-                            <h5>
-                                CS7890 Mobile Application Development
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Mobile App Developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <div className="wd-dashboard-course">
-                    <Link className="wd-dashboard-course-link"
-                        to="/Kanbas/Courses/8901/Home">
-                        <img src="/images/security.jpeg" width={200} />
-                        <div>
-                            <h5>
-                                CS8901 Security and Vulnerabilities in Software Systems
-                            </h5>
-                            <p className="wd-dashboard-course-title">
-                                Security Engineer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

@@ -1,14 +1,45 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link, useLocation } from "react-router-dom";
+import { AiOutlineDashboard } from "react-icons/ai";
+import { IoCalendarOutline } from "react-icons/io5";
+import { LiaBookSolid, LiaCogSolid } from "react-icons/lia";
+import { FaInbox, FaRegCircleUser } from "react-icons/fa6";
 
 export default function KanbasNavigation() {
+  const { pathname } = useLocation();
+
+  const links = [
+    { label: "Account", icon: FaRegCircleUser, route: "/Kanbas/Account" },
+    { label: "Dashboard", icon: AiOutlineDashboard, route: "/Kanbas/Dashboard" },
+    { label: "Courses", icon: LiaBookSolid, route: "/Kanbas/Courses" },
+    { label: "Calendar", icon: IoCalendarOutline, route: "/Kanbas/Calendar" },
+    { label: "Inbox", icon: FaInbox, route: "/Kanbas/Inbox" },
+    { label: "History", icon: LiaCogSolid, route: "/Kanbas/History" },
+  ];
+
   return (
-    <div id="wd-kanbas-navigation">
-      <a href="https://www.northeastern.edu/" id="wd-neu-link" target="_blank">Northeastern</a><br/>
-      <Link to="/Kanbas/Account" id="wd-account-link">Account</Link><br/>
-      <Link to="/Kanbas/Dashboard" id="wd-dashboard-link">Dashboard</Link><br/>
-      <Link to="/Kanbas/Dashboard" id="wd-course-link">Courses</Link><br/>
-      <Link to="/Kanbas/Calendar" id="wd-calendar-link">Calendar</Link><br/>
-      <Link to="/Kanbas/Inbox" id="wd-inbox-link">Inbox</Link><br/>
-      <Link to="/Labs" id="wd-labs-link">Labs</Link><br/>
+    <div id="wd-kanbas-navigation" 
+         className="list-group rounded-0 position-fixed bottom-0 top-0 d-none d-md-block bg-black"
+         style={{ width: '120px', zIndex: 1000 }}>
+      <div className="list-group-item bg-black border-0 text-center py-4">
+        <img src="/images/neu.png" alt="Northeastern Logo" className="mb-3" style={{ width: '80px' }} />
+      </div>
+      
+      {links.map((link, index) => (
+        <Link
+          key={index}
+          to={link.route}
+          className={`list-group-item border-1 text-center py-10 ${
+            pathname.includes(link.route) 
+              ? "bg-white text-danger" 
+              : "bg-black text-white"
+          }`}
+        >
+          <link.icon className="fs-1" style={{ marginBottom: '4px' }} />
+          <div className="small">{link.label}</div>
+          <hr />
+        </Link>
+      ))}
     </div>
-);}
+  );
+}
