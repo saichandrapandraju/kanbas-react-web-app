@@ -4,6 +4,7 @@ import { AiOutlineDashboard } from "react-icons/ai";
 import { IoCalendarOutline } from "react-icons/io5";
 import { LiaBookSolid, LiaCogSolid } from "react-icons/lia";
 import { FaInbox, FaRegCircleUser } from "react-icons/fa6";
+import { ImLab } from "react-icons/im";
 
 export default function KanbasNavigation() {
   const { pathname } = useLocation();
@@ -15,6 +16,7 @@ export default function KanbasNavigation() {
     { label: "Calendar", icon: IoCalendarOutline, route: "/Kanbas/Calendar" },
     { label: "Inbox", icon: FaInbox, route: "/Kanbas/Inbox" },
     { label: "History", icon: LiaCogSolid, route: "/Kanbas/History" },
+    { label: "Labs", icon: ImLab, route: "/Labs" },
   ];
 
   return (
