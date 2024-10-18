@@ -1,20 +1,40 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Location } from 'react-router-dom'; // Import Location type from react-router-dom
+import './CoursesNavigation.css'; // Import the CSS file for styling
 
+// Define the type for the props
+interface CoursesNavigationProps {
+    courseId: string;  // courseId will be a string
+    location: Location; // location will be of type Location from react-router-dom
+}
 
-export default function CoursesNavigation() {
+const CoursesNavigation: React.FC<CoursesNavigationProps> = ({ courseId, location }) => {
+    const links = [
+        { name: "Home", path: `/Kanbas/Courses/${courseId}/Home` },
+        { name: "Modules", path: `/Kanbas/Courses/${courseId}/Modules` },
+        { name: "Piazza", path: `/Kanbas/Courses/${courseId}/Piazza` },
+        { name: "Zoom", path: `/Kanbas/Courses/${courseId}/Zoom` },
+        { name: "Assignments", path: `/Kanbas/Courses/${courseId}/Assignments` },  // Static path
+        { name: "Quizzes", path: `/Kanbas/Courses/${courseId}/Quizzes` },
+        { name: "Grades", path: `/Kanbas/Courses/${courseId}/Grades` },
+        { name: "People", path: `/Kanbas/Courses/${courseId}/People` }  // Static path
+    ];
+
     return (
         <div id="wd-courses-navigation">
-            <Link id="wd-course-home-link" to="/Kanbas/Courses/1234/Home">Home</Link><br />
-            <Link id="wd-course-modules-link" to="/Kanbas/Courses/1234/Modules">Modules
-            </Link><br />
-            <Link id="wd-course-piazza-link" to="/Kanbas/Courses/1234/Piazza">Piazza</Link><br />
-            <Link id="wd-course-zoom-link" to="/Kanbas/Courses/1234/Zoom">Zoom</Link><br />
-            <Link id="wd-course-quizzes-link" to="/Kanbas/Courses/1234/Assignments">
-                Assignments</Link><br />
-            <Link id="wd-course-assignments-link" to="/Kanbas/Courses/1234/Quizzes">Quizzes
-            </Link><br />
-            <Link id="wd-course-grades-link" to="/Kanbas/Courses/1234/Grades">Grades</Link><br />
-            <Link id="wd-course-people-link" to="/Kanbas/Courses/1234/People">People</Link><br />
+            {links.map((link) => (
+                <Link
+                    key={link.name}
+                    to={link.path}
+                    className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                    id={`wd-course-${link.name.toLowerCase()}-link`}
+                >
+                    {link.name}
+                </Link>
+            ))}
         </div>
     );
-}
+};
+
+export default CoursesNavigation;

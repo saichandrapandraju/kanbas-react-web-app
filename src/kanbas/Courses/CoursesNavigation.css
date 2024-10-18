@@ -1,0 +1,31 @@
+#wd-courses-navigation {
+    display: flex;
+    flex-direction: column; /* Vertical layout */
+    align-items: flex-start; /* Align links to the left */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background for contrast */
+    border: 1px solid #ccc; /* Border around navigation */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    width: 200px; /* Fixed width for the navigation panel */
+}
+
+.nav-link {
+    display: block; /* Ensure each link takes up the full width */
+    margin: 8px 0; /* Space between links */
+    padding: 8px 12px; /* Padding for better click area */
+    text-decoration: none; /* Remove underline */
+    color: #007bff; /* Default link color */
+    border-radius: 4px; /* Rounded corners for links */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Smooth transition for hover effect */
+}
+
+.nav-link:hover {
+    background-color: #007bff; /* Blue background on hover */
+    color: #fff; /* White text on hover */
+}
+
+.nav-link:active {
+    background-color: #0056b3; /* Darker blue when active */
+    color: #fff; /* White text when active */
+}

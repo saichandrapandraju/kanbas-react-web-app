@@ -2,7 +2,7 @@ import Lab1 from "./Lab1";
 import { Route, Routes, Navigate } from "react-router";
 import TOC from "./TOC";
 import Lab2 from "./Lab2";
-import Lab3 from "./Lab3";
+import Assignment3 from "./a3";
 
 
 
@@ -15,7 +15,7 @@ export default function Labs() {
         {/* <Route path="/" element={<Navigate to="Labs" />} /> */}
         <Route path="Lab1" element={<Lab1 />} />
         <Route path="Lab2" element={<Lab2 />} />
-        <Route path="Lab3" element={<Lab3 />} />
+        <Route path="Lab3" element={<Assignment3 />} />
       </Routes>
 
       <table>
@@ -24,7 +24,7 @@ export default function Labs() {
             GitHub Link:
           </td>
           <td>
-            <a id="wd-github" target="_blank" href="https://github.com/saichandrapandraju/kanbas-react-web-app">kanbas-react-web-app repository</a>
+            <a id="wd-github" target="_blank" href="https://github.com/saichandrapandraju/kanbas-react-web-app/tree/a2">kanbas-react-web-app repository</a>
           </td>
         </tr>
         <tr>

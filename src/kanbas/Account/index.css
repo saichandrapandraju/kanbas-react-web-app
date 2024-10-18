@@ -1,0 +1,95 @@
+.signin-container {
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .signin-container input, .signin-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+  
+  .signin-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .signin-container button:hover {
+    background-color: #0056b3;
+  }
+  .signup-container {
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .signup-container input, .signup-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+  
+  .signup-container button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .signup-container button:hover {
+    background-color: #218838;
+  }
+  .profile-container {
+    width: 500px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .profile-container input, .profile-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+  
+  .profile-container button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .profile-container button:hover {
+    background-color: #c82333;
+  }
+  #wd-account-navigation {
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ccc; /* added a right border for visual separation */
+  }
+  #wd-account-navigation a {
+    display: block; /* makes each link fill the entire line */
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    padding: 10px; /* added more padding for better tap targets */
+    border-bottom: 1px solid #e0e0e0; /* subtle separator between links */
+  }
+  #wd-account-navigation a:last-child {
+    border-bottom: none; /* removes the border from the last link */
+  }
+  #wd-account-navigation a:hover {
+    background-color: #e0e0e0;
+    border-radius: 4px; /* rounded corners on hover */
+  }
