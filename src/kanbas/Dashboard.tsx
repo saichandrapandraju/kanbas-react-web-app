@@ -28,7 +28,7 @@ export default function Dashboard() {
                             <div className="card-body">
                                 <h5 className="card-title">{course.number} {course.name}</h5>
                                 <p className="card-text">{course.role}</p>
-                                <Link to={`/Kanbas/Courses/${course.number}/Home`} className="btn btn-primary">
+                                <Link to={`/Kanbas/Courses/Home`} className="btn btn-primary">
                                     Go
                                 </Link>
                             </div>

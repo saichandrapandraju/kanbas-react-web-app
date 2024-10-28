@@ -1,65 +1,93 @@
-import React, { useState } from "react";
+import React from "react";
+import "./index.css";
+import ForegroundColors from "./Colors/ForegroundColors";
+import BackgroundColors from "./Colors/BackgroundColors";
+import Borders from "./Layout/Borders";
+import Padding from "./Layout/Padding";
+import Margins from "./Layout/Margins";
+import Corners from "./Layout/Corners";
+import Dimensions from "./Layout/Dimensions";
+import Positions from "./Layout/Positions";
+import Float from "./Layout/Float";
+import GridLayout from "./Layout/GridLayout";
+import Flex from "./Layout/Flex";
+import ReactIcons from "./ReactIcons";
+import BootstrapGrids from "./Bootstrap/Grids";
+import ScreenSizeLabel from "./Bootstrap/ScreenSizeLabel";
+import BootstrapTables from "./Bootstrap/Tables";
+import BootstrapLists from "./Bootstrap/Lists";
+import BootstrapForms from "./Bootstrap/Forms";
+import BootstrapNavigation from "./Bootstrap/Navigation";
 
-// export default function Lab2() {
-//   const [count, setCount] = useState(0);
-
-//   return (
-//     <div id="wd-lab2">
-//       <h2>Lab 2</h2>
-      
-//       <h3>Table Example</h3>
-//       <table border={1} width="100%">
-//         <thead>
-//           <tr>
-//             <th>Quiz</th>
-//             <th>Topic</th>
-//             <th>Date</th>
-//             <th>Grade</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           <tr>
-//             <td>Q1</td>
-//             <td>HTML</td>
-//             <td>2/3/21</td>
-//             <td>85</td>
-//           </tr>
-//           <tr>
-//             <td>Q2</td>
-//             <td>CSS</td>
-//             <td>2/10/21</td>
-//             <td>90</td>
-//           </tr>
-//           <tr>
-//             <td>Q3</td>
-//             <td>JavaScript</td>
-//             <td>2/17/21</td>
-//             <td>95</td>
-//           </tr>
-//         </tbody>
-//       </table>
-      
-//       <h3>Image Example</h3>
-//       <img 
-//         id="wd-teslabot" 
-//         src="/images/teslabot.jpg" 
-//         alt="Tesla Bot" 
-//         height="200px" 
-//       />
-      
-//       <h3>State Management Example</h3>
-//       <p>You clicked {count} times</p>
-//       <button onClick={() => setCount(count + 1)}>
-//         Click me
-//       </button>
-//     </div>
-//   );
-// }
-
-export default function Lab2() {
+function Lab2() {
   return (
-    <div>
-      <h2>Lab 2</h2>
+    <div className="container">
+      {/* CSS Styling Section */}
+      <h2>CSS Styling Labs</h2>
+      
+      <h3>Basic CSS</h3>
+      <div className="basic-css">
+        <h4>Styling with the STYLE attribute</h4>
+        <p style={{ backgroundColor: "blue", color: "white" }}>
+          Style attribute allows configuring look and feel right on the element.
+        </p>
+        
+        <h4>ID and Class Selectors</h4>
+        <div id="wd-css-selectors">
+          <p id="wd-id-selector-1">ID Selector Example 1</p>
+          <p id="wd-id-selector-2">ID Selector Example 2</p>
+          <p className="wd-class-selector">Class Selector Example</p>
+        </div>
+      </div>
+
+      {/* Colors */}
+      <div className="colors-section">
+        <h3>Colors</h3>
+        <ForegroundColors />
+        <BackgroundColors />
+      </div>
+
+      {/* Borders & Spacing */}
+      <div className="borders-spacing">
+        <h3>Borders and Spacing</h3>
+        <Borders />
+        <Padding />
+        <Margins />
+        <Corners />
+      </div>
+
+      {/* Layout */}
+      <div className="layout-section">
+        <h3>Layout</h3>
+        <Dimensions />
+        <Positions />
+        <Float />
+        <GridLayout />
+        <Flex />
+      </div>
+
+      {/* React Icons */}
+      <div className="icons-section">
+        <h3>React Icons</h3>
+        <ReactIcons />
+      </div>
+
+      {/* Bootstrap Section */}
+      <h2>Bootstrap Labs</h2>
+      <ScreenSizeLabel />
+      
+      <div className="bootstrap-section">
+        <h3>Bootstrap Grid System</h3>
+        <BootstrapGrids />
+
+        <h3>Bootstrap Components</h3>
+        <BootstrapTables />
+        <BootstrapLists />
+        <BootstrapForms />
+        <BootstrapNavigation />
+      </div>
     </div>
   );
 }
+
+export default Lab2;

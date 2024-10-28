@@ -1,0 +1,86 @@
+/* ID Selectors */
+p#wd-id-selector-1 {
+    background-color: red;
+    color: white;
+}
+
+p#wd-id-selector-2 {
+    background-color: yellow;
+    color: black;
+}
+
+/* Class Selectors */
+.wd-class-selector {
+    background-color: yellow;
+    color: blue;
+}
+
+/* Colors */
+.wd-fg-color-black { color: black; }
+.wd-fg-color-white { color: white; }
+.wd-fg-color-blue { color: #7070ff; }
+.wd-fg-color-red { color: #ff7070; }
+.wd-fg-color-green { color: green; }
+
+.wd-bg-color-yellow { background-color: #ffff07; }
+.wd-bg-color-blue { background-color: #7070ff; }
+.wd-bg-color-red { background-color: #ff7070; }
+.wd-bg-color-green { background-color: green; }
+
+/* Borders */
+.wd-border-fat {
+    border-width: 20px 30px 20px 30px;
+}
+.wd-border-thin {
+    border-width: 4px;
+}
+.wd-border-solid {
+    border-style: solid;
+}
+.wd-border-dashed {
+    border-style: dashed;
+}
+
+/* Padding & Margins */
+.wd-padded-top-left {
+    padding-top: 50px;
+    padding-left: 50px;
+}
+.wd-margin-bottom {
+    margin-bottom: 50px;
+}
+
+/* Dimensions */
+.wd-dimension-portrait {
+    width: 75px;
+    height: 100px;
+}
+.wd-dimension-landscape {
+    width: 100px;
+    height: 75px;
+}
+.wd-dimension-square {
+    width: 75px;
+    height: 75px;
+}
+
+/* Positions */
+.wd-pos-relative-nudge-up-right {
+    position: relative;
+    bottom: 30px;
+    left: 30px;
+}
+.wd-pos-fixed {
+    position: fixed;
+    right: 0px;
+    bottom: 50%;
+}
+
+/* Grid and Flex */
+.wd-flex-row-container {
+    display: flex;
+    flex-direction: row;
+}
+.wd-flex-grow-1 {
+    flex-grow: 1;
+}
