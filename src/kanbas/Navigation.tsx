@@ -15,8 +15,9 @@ export default function KanbasNavigation() {
     { label: "Courses", icon: LiaBookSolid, route: "/Kanbas/Courses" },
     { label: "Calendar", icon: IoCalendarOutline, route: "/Kanbas/Calendar" },
     { label: "Inbox", icon: FaInbox, route: "/Kanbas/Inbox" },
-    { label: "History", icon: LiaCogSolid, route: "/Kanbas/History" },
     { label: "Labs", icon: ImLab, route: "/Labs" },
+    { label: "History", icon: LiaCogSolid, route: "/Kanbas/History" },
+    
   ];
 
   return (
