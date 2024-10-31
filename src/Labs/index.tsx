@@ -28,7 +28,7 @@ export default function Labs() {
               GitHub Link:
             </td>
             <td>
-              <a id="wd-github" target="_blank" href="https://github.com/saichandrapandraju/kanbas-react-web-app/tree/a3">kanbas-react-web-app repository</a>
+              <a id="wd-github" target="_blank" href="https://github.com/saichandrapandraju/kanbas-react-web-app/tree/a4">kanbas-react-web-app repository</a>
             </td>
           </tr>
           <tr>
