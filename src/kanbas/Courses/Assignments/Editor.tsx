@@ -1,82 +1,131 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import * as db from '../../Database';
-
+// src/Kanbas/Courses/Assignments/Editor.tsx
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { addAssignment, updateAssignment, setAssignment } from './reducer';
+import "bootstrap/dist/css/bootstrap.min.css";
 export default function AssignmentEditor() {
-    const { cid, aid } = useParams();
-    const [assignment, setAssignment] = useState({_id: "1", title: "", course: "", dueDate: "", points: 1, description: "", group : ""});
+  const { cid, aid } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const { assignment } = useSelector((state: any) => state.assignmentsReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-    useEffect(() => {
-        // Retrieve assignment from the database's assignments object
-        const foundAssignment = db.assignments.find(a => a._id === aid);
-        if (foundAssignment) {
-            setAssignment(foundAssignment);
-        } else {
-            
-        }
-    }, [aid]);
-
-    if (!assignment || Object.keys(assignment).length === 0) {
-        return <div>Loading...</div>;
+  useEffect(() => {
+    if (currentUser?.role !== "FACULTY") {
+      navigate(`/Kanbas/Courses/${cid}/Assignments`);
     }
+  }, [currentUser, cid, navigate]);
 
-    return (
-        <div className="container mt-4">
-            {assignment._id}
-            <h2>{assignment.title}</h2>
-            <form>
-                <div className="mb-3">
-                    <label htmlFor="assignment-name" className="form-label">Assignment Name</label>
-                    <input type="text" className="form-control" id="assignment-name" defaultValue={assignment.title ??"sm"} />
-                </div>
+  const handleSave = () => {
+    if (aid === "new") {
+      dispatch(addAssignment({ ...assignment, course: cid }));
+    } else {
+      dispatch(updateAssignment(assignment));
+    }
+    navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  };
 
-                <div className="mb-3">
-                    <label htmlFor="assignment-description" className="form-label">Description</label>
-                    <textarea 
-                        className="form-control" 
-                        id="assignment-description" 
-                        rows={6}
-                        defaultValue={assignment.description}
-                    ></textarea>
-                </div>
-
-                <div className="row mb-3">
-                    <div className="col">
-                        <label htmlFor="points" className="form-label">Points</label>
-                        <input type="number" className="form-control" id="points" defaultValue={assignment.points} />
-                    </div>
-                    <div className="col">
-                        <label htmlFor="assignment-group" className="form-label">Assignment Group</label>
-                        <select className="form-select" id="assignment-group" defaultValue={assignment.group}>
-                            <option value="assignments">ASSIGNMENTS</option>
-                            <option value="quizzes">QUIZZES</option>
-                            <option value="project">PROJECT</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div className="mb-3">
-                    <label htmlFor="due-date" className="form-label">Due</label>
-                    <input type="datetime-local" className="form-control" id="due-date" defaultValue={assignment.dueDate} />
-                </div>
-
-                <div className="row mb-3">
-                    <div className="col">
-                        <label htmlFor="available-from" className="form-label">Available from</label>
-                        <input type="datetime-local" className="form-control" id="available-from" defaultValue={assignment.dueDate} />
-                    </div>
-                    <div className="col">
-                        <label htmlFor="available-until" className="form-label">Until</label>
-                        <input type="datetime-local" className="form-control" id="available-until" defaultValue={assignment.dueDate} />
-                    </div>
-                </div>
-
-                <div className="text-end mt-4">
-                    <Link to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-outline-secondary me-2">Cancel</Link>
-                    <Link to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-danger">Save</Link>
-                </div>
-            </form>
+  return (
+    <div className="container">
+      <h3>{aid === "new" ? "New Assignment" : "Edit Assignment"}</h3>
+      <form className="mt-4">
+        <div className="mb-3">
+          <label className="form-label">Assignment Name</label>
+          <input
+            type="text"
+            className="form-control"
+            value={assignment.title}
+            onChange={(e) => dispatch(setAssignment({ 
+              ...assignment, 
+              title: e.target.value 
+            }))}
+          />
         </div>
-    );
+
+        <div className="mb-3">
+          <label className="form-label">Description</label>
+          <textarea
+            className="form-control"
+            rows={5}
+            value={assignment.description}
+            onChange={(e) => dispatch(setAssignment({ 
+              ...assignment, 
+              description: e.target.value 
+            }))}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Points</label>
+          <input
+            type="number"
+            className="form-control"
+            value={assignment.points}
+            onChange={(e) => dispatch(setAssignment({ 
+              ...assignment, 
+              points: parseInt(e.target.value) 
+            }))}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Due Date</label>
+          <input
+            type="date"
+            className="form-control"
+            value={assignment.dueDate}
+            onChange={(e) => dispatch(setAssignment({ 
+              ...assignment, 
+              dueDate: e.target.value 
+            }))}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Available From</label>
+          <input
+            type="date"
+            className="form-control"
+            value={assignment.availableFromDate}
+            onChange={(e) => dispatch(setAssignment({ 
+              ...assignment, 
+              availableFromDate: e.target.value 
+            }))}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Available Until</label>
+          <input
+            type="date"
+            className="form-control"
+            value={assignment.availableUntilDate}
+            onChange={(e) => dispatch(setAssignment({ 
+              ...assignment, 
+              availableUntilDate: e.target.value 
+            }))}
+          />
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            className="btn btn-danger me-2"
+            onClick={handleSave}
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments`)}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }

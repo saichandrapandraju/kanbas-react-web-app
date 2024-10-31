@@ -1,74 +1,140 @@
-import React from 'react';
-import { FaSearch, FaPlus } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
-import './Assignments.css'; // Import the CSS file for styling
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { FaSearch, FaPlus, FaEllipsisV, FaTrash, FaPencilAlt } from 'react-icons/fa';
+import { deleteAssignment, setAssignment } from './reducer';
 import GreenCheckmark from '../Modules/GreenCheckmark';
-import * as db from '../../Database';
+import './Assignments.css';
 
 export default function Assignments() {
-  const { cid } = useParams(); // Get the course ID from the URL
+  const { cid } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  // Get assignments from Redux store
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  
+  // Filter assignments for current course
+  const courseAssignments = assignments
+    .filter((assignment: any) => assignment.course === cid)
+    .filter((assignment: any) => 
+      assignment.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-  // Find assignments for the current course
-  const assignments = db.assignments.filter(
-    (assignment) => assignment.course === cid
-  );
+  const handleDelete = (e: React.MouseEvent, assignmentId: string) => {
+    e.preventDefault();
+    if (window.confirm("Are you sure you want to delete this assignment?")) {
+      dispatch(deleteAssignment(assignmentId));
+    }
+  };
+
+  const handleEdit = (e: React.MouseEvent, assignment: any) => {
+    e.preventDefault();
+    dispatch(setAssignment(assignment));
+    navigate(`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`);
+  };
+
+  const handleAddAssignment = () => {
+    dispatch(setAssignment({
+      _id: "",
+      title: "New Assignment",
+      course: cid,
+      description: "",
+      points: 100,
+      dueDate: "",
+      availableFromDate: "",
+      availableUntilDate: ""
+    }));
+    navigate(`/Kanbas/Courses/${cid}/Assignments/new`);
+  };
+
+  const isFaculty = currentUser?.role === "FACULTY";
 
   return (
     <div id="wd-assignments" className="container">
-      {cid ?? "nan"}
-      {/* Search bar and buttons */}
       <div className="search-group-wrapper d-flex align-items-center mb-3">
-        {/* Search bar styled as per image */}
         <div className="search-bar-container">
           <FaSearch className="search-icon" />
           <input
             id="wd-search-assignment"
             className="search-bar"
             placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
-        {/* Buttons styled as per image */}
-        <button id="wd-add-assignment-group" className="btn btn-outline-secondary ms-2">
-          +Group
-        </button>
-        <button id="wd-add-assignment" className="btn btn-danger ms-2">
-          +Assignment
-        </button>
+        {isFaculty && (
+          <>
+            <button id="wd-add-assignment-group" className="btn btn-outline-secondary ms-2">
+              <FaPlus /> Group
+            </button>
+            <button 
+              id="wd-add-assignment" 
+              className="btn btn-danger ms-2"
+              onClick={handleAddAssignment}
+            >
+              <FaPlus /> Assignment
+            </button>
+          </>
+        )}
       </div>
 
-      {/* Assignments Header */}
       <div id="wd-assignments-title" className="d-flex justify-content-between align-items-center">
         <h3 className="mb-0">
           ASSIGNMENTS <span className="percentage">40% of Total</span>
         </h3>
-        <button className="btn btn-outline-secondary btn-sm">
-          <FaPlus /> Add
-        </button>
+        {isFaculty && (
+          <button className="btn btn-outline-secondary btn-sm">
+            <FaPlus /> Add
+          </button>
+        )}
       </div>
 
-      {/* Assignments List */}
       <ul id="wd-assignment-list" className="list-group mt-3">
-        {assignments.map((assignment: { _id: string; title: string; course: string; dueDate: string; points: number }) => (
+        {courseAssignments.map((assignment: any) => (
           <li
             key={assignment._id}
             className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center"
           >
-            <div>
-              <a
-                className="wd-assignment-link fw-bold"
-                href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
-              >
-                {assignment.title}
-              </a>
-              <p className="mb-1">
-                Multiple Modules | <strong>Not available until</strong> May 6 at 12:00am |{' '}
-                <strong>Due</strong> {assignment.dueDate} | {assignment.points} pts
-              </p>
-            </div>
-            <div className="checkmark-container">
-              {/* Include the GreenCheckmark component here if assignment is complete */}
-              {/* <GreenCheckmark /> */}
+            <div className="d-flex justify-content-between w-100">
+              <div>
+                <a
+                  className="wd-assignment-link fw-bold text-decoration-none"
+                  href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                >
+                  {assignment.title}
+                </a>
+                <p className="mb-1">
+                  Multiple Modules | Due {assignment.dueDate} | {assignment.points} pts
+                </p>
+                {assignment.availableFromDate && (
+                  <small className="text-muted">
+                    Available from {assignment.availableFromDate} until {assignment.availableUntilDate}
+                  </small>
+                )}
+              </div>
+              <div className="d-flex align-items-center">
+                <GreenCheckmark />
+                {isFaculty && (
+                  <div className="ms-3">
+                    <button
+                      className="btn btn-sm btn-warning me-2"
+                      onClick={(e) => handleEdit(e, assignment)}
+                    >
+                      <FaPencilAlt />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger me-2"
+                      onClick={(e) => handleDelete(e, assignment._id)}
+                    >
+                      <FaTrash />
+                    </button>
+                    <FaEllipsisV className="text-secondary" />
+                  </div>
+                )}
+              </div>
             </div>
           </li>
         ))}
