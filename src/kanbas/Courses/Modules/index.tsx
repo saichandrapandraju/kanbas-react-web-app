@@ -8,11 +8,14 @@ import ModuleControlButtons from './ModuleControlButtons';
 import ModuleControls from './ModuleControls';
 import './Modules.css';
 import GreenCheckmark from './GreenCheckmark';
+
 export default function Modules() {
   const { cid } = useParams();
   const dispatch = useDispatch();
   const { modules, module } = useSelector((state: any) => state.modulesReducer);
-
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  
+  const isFaculty = currentUser?.role === "FACULTY";
   const courseModules = modules.filter((m: any) => m.course === cid);
 
   const handleAddModule = () => {
@@ -21,7 +24,9 @@ export default function Modules() {
   };
 
   const handleDeleteModule = (moduleId: string) => {
-    dispatch(deleteModule(moduleId));
+    if (window.confirm("Are you sure you want to delete this module?")) {
+      dispatch(deleteModule(moduleId));
+    }
   };
 
   const handleUpdateModule = () => {
@@ -35,28 +40,40 @@ export default function Modules() {
 
   return (
     <div className="modules-container">
-      <ModuleForm
-        module={module}
-        setModule={(newModule) => dispatch(setModule(newModule))}
-        addModule={handleAddModule}
-        updateModule={handleUpdateModule}
-      />
+      {isFaculty && (
+        <ModuleForm
+          module={module}
+          setModule={(newModule) => dispatch(setModule(newModule))}
+          addModule={handleAddModule}
+          updateModule={handleUpdateModule}
+        />
+      )}
       
       <div style={{ marginBottom: '1rem' }}>
-        <ModuleControls />
+        {isFaculty ? (
+          <ModuleControls />
+        ) : (
+          <div className="d-flex justify-content-end mb-3">
+            <button className="btn btn-outline-secondary">
+              Collapse All
+            </button>
+          </div>
+        )}
       </div>
 
       <ul className="modules-list">
         {courseModules.map((module: any) => (
           <li className="module-item" key={module._id}>
             <div className="module-title">
-              <BsGripVertical className="icon" />
+              {isFaculty && <BsGripVertical className="icon" />}
               {module.name}
-              <ModuleControlButtons
-                moduleId={module._id}
-                onDelete={handleDeleteModule}
-                onEdit={() => handleEditModule(module)}
-              />
+              {isFaculty && (
+                <ModuleControlButtons
+                  moduleId={module._id}
+                  onDelete={handleDeleteModule}
+                  onEdit={() => handleEditModule(module)}
+                />
+              )}
             </div>
             {module.description && (
               <p className="module-description">{module.description}</p>
@@ -65,7 +82,7 @@ export default function Modules() {
               <ul className="lessons-list">
                 {module.lessons.map((lesson: any) => (
                   <li className="lesson-item" key={lesson.id}>
-                    <BsGripVertical className="icon" />
+                    {isFaculty && <BsGripVertical className="icon" />}
                     {lesson.name}
                     <div className="float-end">
                       <GreenCheckmark />
