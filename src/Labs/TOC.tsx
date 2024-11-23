@@ -19,7 +19,7 @@ const TOC = () => {
                 Labs
               </Link>
             </li>
-            {[1, 2, 3, 4].map((labNumber) => (
+            {[1, 2, 3, 4, 5].map((labNumber) => (
               <li className="nav-item ms-3" key={labNumber}>
                 <Link 
                   to={`/Labs/Lab${labNumber}`}

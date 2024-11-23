@@ -2,13 +2,22 @@ import React from 'react';
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
 
-export default function ModuleControls() {
+// Add this interface at the top of ModuleControls.tsx
+interface ModuleControlsProps {
+  setModuleName: (name: string) => void;
+  moduleName: string;
+  addModule: () => Promise<void>;
+}
+
+// Then update your component definition
+const ModuleControls = () => {
   return (
     <div id="wd-modules-controls" className="text-nowrap">
-      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1">
-        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-        Module
-      </button>
+      <h5 id="wd-add-module-btn" className="btn btn-lg btn-danger me-1">
+        {/* <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} /> */}
+        Modules
+      </h5>
+      
       <div className="dropdown d-inline me-1 float-end">
         <button id="wd-publish-all-btn" className="btn btn-lg btn-secondary dropdown-toggle"
           type="button" data-bs-toggle="dropdown">
@@ -48,4 +57,6 @@ export default function ModuleControls() {
       </button>
     </div>
   );
-}
+};
+
+export default ModuleControls;

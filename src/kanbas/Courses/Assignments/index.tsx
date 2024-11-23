@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaSearch, FaPlus, FaEllipsisV, FaTrash, FaPencilAlt } from 'react-icons/fa';
-import { deleteAssignment, setAssignment } from './reducer';
+import { deleteAssignment, setAssignment, setAssignments } from './reducer';
 import GreenCheckmark from '../Modules/GreenCheckmark';
 import './Assignments.css';
-
+import * as assignmentsClient from './client';
 export default function Assignments() {
   const { cid } = useParams();
   const navigate = useNavigate();
@@ -13,20 +13,28 @@ export default function Assignments() {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Get assignments from Redux store
-  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  
+  const fetchAssignments = async () => {
+    const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+
+  const handleDeleteAssignment = async (assignmentId: string) => {
+    try {
+      await assignmentsClient.deleteAssignment(assignmentId);
+      dispatch(deleteAssignment(assignmentId));
+    } catch (error) {
+      console.error("Failed to delete assignment:", error);
+    }
+  };
   // Filter assignments for current course
-  const courseAssignments = assignments
-    .filter((assignment: any) => assignment.course === cid)
-    .filter((assignment: any) => 
-      assignment.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+ 
 
   const handleDelete = (e: React.MouseEvent, assignmentId: string) => {
     e.preventDefault();
     if (window.confirm("Are you sure you want to delete this assignment?")) {
-      dispatch(deleteAssignment(assignmentId));
+      handleDeleteAssignment(assignmentId);
     }
   };
 
@@ -51,7 +59,9 @@ export default function Assignments() {
   };
 
   const isFaculty = currentUser?.role === "FACULTY";
-
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
   return (
     <div id="wd-assignments" className="container">
       <div className="search-group-wrapper d-flex align-items-center mb-3">
@@ -85,15 +95,15 @@ export default function Assignments() {
         <h3 className="mb-0">
           ASSIGNMENTS <span className="percentage">40% of Total</span>
         </h3>
-        {isFaculty && (
+        {/* {isFaculty && (
           <button className="btn btn-outline-secondary btn-sm">
             <FaPlus /> Add
           </button>
-        )}
+        )} */}
       </div>
 
       <ul id="wd-assignment-list" className="list-group mt-3">
-        {courseAssignments.map((assignment: any) => (
+        {assignments.map((assignment: any) => (
           <li
             key={assignment._id}
             className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center"

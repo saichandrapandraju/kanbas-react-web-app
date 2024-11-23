@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addAssignment, updateAssignment, setAssignment } from './reducer';
 import "bootstrap/dist/css/bootstrap.min.css";
+import * as assignmentsClient from './client';
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const navigate = useNavigate();
@@ -17,15 +18,42 @@ export default function AssignmentEditor() {
       navigate(`/Kanbas/Courses/${cid}/Assignments`);
     }
   }, [currentUser, cid, navigate]);
-
-  const handleSave = () => {
-    if (aid === "new") {
-      dispatch(addAssignment({ ...assignment, course: cid }));
-    } else {
-      dispatch(updateAssignment(assignment));
+  const fetchAssignment = async () => {
+    if (aid) {
+      const response = await assignmentsClient.findAssignmentById(aid);
+      dispatch(setAssignment(response));
     }
-    navigate(`/Kanbas/Courses/${cid}/Assignments`);
   };
+  useEffect(() => {
+    fetchAssignment();
+  }, [aid]);
+  const handleSave = () => {
+    handleSaveAssignment();
+  };
+  const handleSaveAssignment = async () => {
+    try {
+      if (aid !== "new") {
+        const status = await assignmentsClient.updateAssignment(aid as string, { ...assignment, course: cid });
+        dispatch(updateAssignment(status));
+      } else {
+        console.log("Creating new assignment", assignment.title);
+        const newAssignment = await assignmentsClient.createAssignment(cid as string, { ...assignment, course: cid });
+        dispatch(addAssignment(newAssignment));
+      }
+      navigate(`/Kanbas/Courses/${cid}/Assignments`);
+    } catch (error) {
+      console.error("Error saving assignment:", error);
+    }
+  };
+
+  // const handleSave = () => {
+  //   if (aid === "new") {
+  //     dispatch(addAssignment({ ...assignment, course: cid }));
+  //   } else {
+  //     dispatch(updateAssignment(assignment));
+  //   }
+  //   navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  // };
 
   return (
     <div className="container">
@@ -113,7 +141,7 @@ export default function AssignmentEditor() {
           <button
             type="button"
             className="btn btn-danger me-2"
-            onClick={handleSave}
+            onClick={() => handleSave()}
           >
             Save
           </button>

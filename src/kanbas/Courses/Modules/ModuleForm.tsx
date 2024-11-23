@@ -3,8 +3,8 @@ import React from 'react';
 interface ModuleFormProps {
   module: any;
   setModule: (module: any) => void;
-  addModule: () => void;
-  updateModule: () => void;
+  addModule: (moduleAdd: any) => void;
+  updateModule: (module: any) => void;
 }
 
 export default function ModuleForm({ 
@@ -29,14 +29,14 @@ export default function ModuleForm({
       />
       <button
         className="btn btn-success me-2"
-        onClick={addModule}
+        onClick={() => addModule(module)}
         id="wd-add-module-btn"
       >
         Add Module
       </button>
       <button
         className="btn btn-primary"
-        onClick={updateModule}
+        onClick={() => updateModule(module)}
         id="wd-update-module-btn"
       >
         Update Module

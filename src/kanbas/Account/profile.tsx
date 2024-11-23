@@ -2,12 +2,17 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
+import * as client from "./client";
 
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [profile, setProfile] = useState<any>({});
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const updateProfile = async () => {
+    const updatedProfile = await client.updateUser(profile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
 
   // Fetch profile data when component mounts
   useEffect(() => {
@@ -20,10 +25,12 @@ export default function Profile() {
   }, [currentUser, navigate]);
 
   // Handle sign out
-  const signout = () => {
+  const signout = async () => {
+    await client.signout();
     dispatch(setCurrentUser(null));
     navigate("/Kanbas/Account/Signin");
   };
+
 
   // Handle profile updates
   const handleUpdateProfile = (e: React.FormEvent) => {
@@ -118,14 +125,7 @@ export default function Profile() {
           </div>
 
           <div className="d-grid gap-2">
-            <button
-              type="submit"
-              className="btn btn-primary mb-2"
-              id="wd-update-profile-btn"
-            >
-              Update Profile
-            </button>
-            
+            <button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </button>
             <button
               type="button"
               className="btn btn-danger"

@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import * as db from "./Database";
 import { 
   toggleShowAllCourses, 
   enrollInCourse, 
-  unenrollFromCourse 
+  unenrollFromCourse, 
+  setEnrollments
 } from "./Enrollments/reducer";
+import * as userClient from "./Account/client";
+import * as enrollmentsClient from "./Enrollments/client";
+import { useEffect } from "react";
+
 interface DashboardProps {
   courses: any[];
+  allCourses: any[];
   course: any;
   setCourse: (course: any) => void;
   addNewCourse: () => void;
@@ -15,8 +20,16 @@ interface DashboardProps {
   updateCourse: () => void;
 }
 
+interface Enrollment {
+  user: string;
+  course: string;
+  _id: string;
+}
+
+
 export default function Dashboard({
   courses,
+  allCourses,
   course,
   setCourse,
   addNewCourse,
@@ -26,6 +39,7 @@ export default function Dashboard({
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments, showAllCourses } = useSelector((state: any) => state.enrollmentsReducer);
+
   const isEnrolled = (courseId: string) => {
     return enrollments.some(
       (enrollment: any) => 
@@ -36,26 +50,30 @@ export default function Dashboard({
     // Handle enrollment toggle
     const handleEnrollmentToggle = (courseId: string) => {
       if (isEnrolled(courseId)) {
-        // Add useDispatch hook at the top level of component
-        dispatch(unenrollFromCourse({
-          studentId: currentUser._id,
-          courseId
-        }));
+        handleUnenroll(courseId);
       } else {
-        dispatch(enrollInCourse({
-          studentId: currentUser._id,
-          courseId
-        }));
+        console.log("Enrolling in course", courseId);
+        handleEnroll(courseId);
       }
     };
     // Filter courses based on enrollment status and showAllCourses flag
   const getDisplayedCourses = () => {
-    if (currentUser?.role !== "STUDENT" || showAllCourses) {
+    if (currentUser?.role !== "STUDENT") {
       return courses;
+    } else if (showAllCourses && currentUser?.role === "STUDENT") {
+      return allCourses;
+    } else {
+      console.log("Getting displayed courses", enrollments, currentUser);
+      const filteredCourses = allCourses.filter(course => 
+        enrollments.some(
+          (enrollment: any) => 
+            enrollment.user === currentUser?._id && 
+            enrollment.course === course._id
+        )
+      );
+      console.log("Filtered courses", filteredCourses);
+      return filteredCourses;
     }
-    return courses.filter((course: any) => 
-      isEnrolled(course._id)
-    );
   };
 
   // Protect course access
@@ -65,6 +83,42 @@ export default function Dashboard({
       alert("You must be enrolled in this course to access it.");
     }
   };
+  const handleEnroll = async (courseId: string) => {
+    try {
+      await enrollmentsClient.enrollInCourse(currentUser._id, courseId);
+      dispatch(enrollInCourse({
+        studentId: currentUser._id,
+        courseId
+      }));
+    } catch (error) {
+      console.error("Error enrolling in course:", error);
+    }
+  };
+  
+  const handleUnenroll = async (courseId: string) => {
+    try {
+      await enrollmentsClient.unenrollFromCourse(currentUser._id, courseId);
+      dispatch(unenrollFromCourse({
+        studentId: currentUser._id,
+        courseId
+      }));
+    } catch (error) {
+      console.error("Error unenrolling from course:", error);
+    }
+  };
+  useEffect(() => {
+    const loadEnrollments = async () => {
+      if (currentUser?._id) {
+        try {
+          const userEnrollments = await enrollmentsClient.findEnrollmentsByStudent(currentUser._id);
+          dispatch(setEnrollments(userEnrollments));
+        } catch (error) {
+          console.error("Error loading enrollments:", error);
+        }
+      }
+    };
+    loadEnrollments();
+  }, [currentUser, dispatch]);
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
