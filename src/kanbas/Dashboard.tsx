@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { 
   toggleShowAllCourses, 
@@ -18,6 +18,9 @@ interface DashboardProps {
   addNewCourse: () => void;
   deleteCourse: (courseId: string) => void;
   updateCourse: () => void;
+  enrolling: boolean;
+  setEnrolling: (enrolling: boolean) => void;
+  updateEnrollment: (courseId: string, enrolled: boolean) => void;
 }
 
 interface Enrollment {
@@ -34,17 +37,21 @@ export default function Dashboard({
   setCourse,
   addNewCourse,
   deleteCourse,
-  updateCourse
+  updateCourse,
+  enrolling,
+  setEnrolling,
+  updateEnrollment
 }: DashboardProps) {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments, showAllCourses } = useSelector((state: any) => state.enrollmentsReducer);
-
+  const navigate = useNavigate();
   const isEnrolled = (courseId: string) => {
+    console.log("isEnrolled", enrollments, currentUser?._id, courseId);
     return enrollments.some(
       (enrollment: any) => 
         enrollment.user === currentUser?._id && 
-        enrollment.course === courseId
+        enrollment.course._id === courseId
     );
   };
     // Handle enrollment toggle
@@ -55,6 +62,7 @@ export default function Dashboard({
         console.log("Enrolling in course", courseId);
         handleEnroll(courseId);
       }
+      navigate(`/Kanbas/Dashboard`);
     };
     // Filter courses based on enrollment status and showAllCourses flag
   const getDisplayedCourses = () => {
@@ -64,13 +72,7 @@ export default function Dashboard({
       return allCourses;
     } else {
       console.log("Getting displayed courses", enrollments, currentUser);
-      const filteredCourses = allCourses.filter(course => 
-        enrollments.some(
-          (enrollment: any) => 
-            enrollment.user === currentUser?._id && 
-            enrollment.course === course._id
-        )
-      );
+      const filteredCourses = courses;
       console.log("Filtered courses", filteredCourses);
       return filteredCourses;
     }
@@ -121,7 +123,13 @@ export default function Dashboard({
   }, [currentUser, dispatch]);
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1>
+      <h1 id="wd-dashboard-title">Dashboard
+        <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary" >
+          {enrolling ? "My Courses" : "All Courses"}
+        </button>
+
+      </h1>
+
       <hr />
       
       {/* Only show course management UI for faculty */}
@@ -158,7 +166,7 @@ export default function Dashboard({
       )}
 
       {/* Show Enrollments toggle for students */}
-      {currentUser?.role === "STUDENT" && (
+      {/* {currentUser?.role === "STUDENT" && (
         <div className="mb-3">
           <button
             className="btn btn-primary"
@@ -167,10 +175,10 @@ export default function Dashboard({
             {showAllCourses ? "Show My Courses" : "Show All Courses"}
           </button>
         </div>
-      )}
+      )} */}
 
       <h2 id="wd-dashboard-published">
-        {showAllCourses ? "All Courses" : "My Courses"} ({getDisplayedCourses().length})
+        Courses ({getDisplayedCourses().length})
       </h2>
       <hr />
       
@@ -179,15 +187,24 @@ export default function Dashboard({
           {getDisplayedCourses().map((course: any) => (
             <div key={course._id} className="col" style={{ width: "300px" }}>
               <div className="card">
-                <img src={course.image || "/images/reactjs.jpg"} className="card-img-top" alt="course" />
+                <img src={course.image || "/images/reactjs.png"} className="card-img-top" alt="course" />
                 <div className="card-body">
                   <Link 
                     to={`/Kanbas/Courses/${course._id}`}
                     className="text-decoration-none"
                     onClick={(e) => handleCourseClick(e, course._id)}
                   >
-                    <h5 className="card-title">{course.name}</h5>
+                    <h5 className="card-title">
+                      
+                      
+                      {course.name}
+                      </h5>
                   </Link>
+                  {/* {enrolling && (
+                        <button className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} >
+                          {course.enrolled ? "Unenroll" : "Enroll"}
+                        </button>
+                      )} */}
                   <p className="card-text">{course.description}</p>
                   
                   {currentUser?.role === "FACULTY" && (
@@ -210,7 +227,10 @@ export default function Dashboard({
                   {currentUser?.role === "STUDENT" && (
                     <button
                       className={`btn ${isEnrolled(course._id) ? 'btn-danger' : 'btn-success'} float-end`}
-                      onClick={() => handleEnrollmentToggle(course._id)}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleEnrollmentToggle(course._id);
+                      }}
                     >
                       {isEnrolled(course._id) ? 'Unenroll' : 'Enroll'}
                     </button>
