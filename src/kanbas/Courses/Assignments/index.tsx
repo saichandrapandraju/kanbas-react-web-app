@@ -1,153 +1,146 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { FaSearch, FaPlus, FaEllipsisV, FaTrash, FaPencilAlt } from 'react-icons/fa';
-import { deleteAssignment, setAssignment, setAssignments } from './reducer';
-import GreenCheckmark from '../Modules/GreenCheckmark';
-import './Assignments.css';
-import * as assignmentsClient from './client';
+import { BsGripVertical } from "react-icons/bs";
+import LessonControlButtons from "../Modules/LessonControlButtons";
+import { IoEllipsisVertical } from "react-icons/io5";
+import { FaTrash } from "react-icons/fa";
+import { BsPlus } from "react-icons/bs";
+import { FaPlus } from "react-icons/fa6";
+import { IoMdSearch } from "react-icons/io";
+import { GrDocumentText } from "react-icons/gr";
+import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { addAssignment, deleteAssignment } from "./reducer";
+import { Link } from "react-router-dom";
+import FacultyRestrictedRoute from "../../FacultyRestrictedRoute";
+import * as coursesClient from "../client";
+import { useEffect } from "react";
+import { setAssignments } from "./reducer";
+import * as assignmentClient from "./client";
+
 export default function Assignments() {
   const { cid } = useParams();
-  const navigate = useNavigate();
+  const assignments = useSelector(
+    (state: any) => state.assignmentsReducer.assignments
+  );
   const dispatch = useDispatch();
-  const [searchTerm, setSearchTerm] = useState("");
-  
-  // Get assignments from Redux store
-  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const delAssignment = async (aID: string) => {
+    const dialog = window.confirm(
+      "Are you sure you want to delete this Assignment?"
+    );
+    if (dialog) {
+      await assignmentClient.deleteAssignment(aID);
+      dispatch(deleteAssignment(aID));
+    }
+  };
+
   const fetchAssignments = async () => {
-    const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
+    const assignments = await coursesClient.findAssignmentsForCourse(
+      cid as string
+    );
     dispatch(setAssignments(assignments));
   };
-
-  const handleDeleteAssignment = async (assignmentId: string) => {
-    try {
-      await assignmentsClient.deleteAssignment(assignmentId);
-      dispatch(deleteAssignment(assignmentId));
-    } catch (error) {
-      console.error("Failed to delete assignment:", error);
-    }
-  };
-  // Filter assignments for current course
- 
-
-  const handleDelete = (e: React.MouseEvent, assignmentId: string) => {
-    e.preventDefault();
-    if (window.confirm("Are you sure you want to delete this assignment?")) {
-      handleDeleteAssignment(assignmentId);
-    }
-  };
-
-  const handleEdit = (e: React.MouseEvent, assignment: any) => {
-    e.preventDefault();
-    dispatch(setAssignment(assignment));
-    navigate(`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`);
-  };
-
-  const handleAddAssignment = () => {
-    dispatch(setAssignment({
-      _id: "",
-      title: "New Assignment",
-      course: cid,
-      description: "",
-      points: 100,
-      dueDate: "",
-      availableFromDate: "",
-      availableUntilDate: ""
-    }));
-    navigate(`/Kanbas/Courses/${cid}/Assignments/new`);
-  };
-
-  const isFaculty = currentUser?.role === "FACULTY";
   useEffect(() => {
     fetchAssignments();
-  }, [cid]);
+  }, []);
+
   return (
-    <div id="wd-assignments" className="container">
-      <div className="search-group-wrapper d-flex align-items-center mb-3">
-        <div className="search-bar-container">
-          <FaSearch className="search-icon" />
+    <div
+      id="wd-assignments"
+      style={{ marginLeft: "30px", marginRight: "30px" }}
+    >
+      <div id="wd-assign-controls" className="text-nowrap">
+        <FacultyRestrictedRoute>
+          <Link to={`/Kanbas/Courses/${cid}/Assignments/Editor`}>
+            <button
+              id="wd-add-assignment-btn"
+              className="btn btn-lg btn-danger me-1 float-end"
+              onClick={addAssignment}
+            >
+              <FaPlus
+                className="position-relative me-2"
+                style={{ bottom: "1px" }}
+              />
+              Assignment
+            </button>
+          </Link>
+          <button
+            id="wd-add-group-btn"
+            className="btn btn-lg btn-secondary me-1 float-end"
+          >
+            <FaPlus
+              className="position-relative me-2"
+              style={{ bottom: "1px" }}
+            />
+            Group
+          </button>
+        </FacultyRestrictedRoute>
+        <div
+          id="wd-search-assignment"
+          className="input-group border border-black flex-box ms-2 mt-4"
+          style={{ width: "250px", height: "45px" }}
+        >
+          <span className="input-group-text bg-white border-0">
+            <IoMdSearch />
+          </span>
           <input
-            id="wd-search-assignment"
-            className="search-bar"
+            type="text"
+            className="border-0"
             placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: "209px" }}
           />
         </div>
-        {isFaculty && (
-          <>
-            <button id="wd-add-assignment-group" className="btn btn-outline-secondary ms-2">
-              <FaPlus /> Group
-            </button>
-            <button 
-              id="wd-add-assignment" 
-              className="btn btn-danger ms-2"
-              onClick={handleAddAssignment}
-            >
-              <FaPlus /> Assignment
-            </button>
-          </>
-        )}
       </div>
-
-      <div id="wd-assignments-title" className="d-flex justify-content-between align-items-center">
-        <h3 className="mb-0">
-          ASSIGNMENTS <span className="percentage">40% of Total</span>
-        </h3>
-        {/* {isFaculty && (
-          <button className="btn btn-outline-secondary btn-sm">
-            <FaPlus /> Add
-          </button>
-        )} */}
-      </div>
-
-      <ul id="wd-assignment-list" className="list-group mt-3">
-        {assignments.map((assignment: any) => (
-          <li
-            key={assignment._id}
-            className="wd-assignment-list-item list-group-item d-flex justify-content-between align-items-center"
-          >
-            <div className="d-flex justify-content-between w-100">
-              <div>
-                <a
-                  className="wd-assignment-link fw-bold text-decoration-none"
-                  href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
-                >
-                  {assignment.title}
-                </a>
-                <p className="mb-1">
-                  Multiple Modules | Due {assignment.dueDate} | {assignment.points} pts
-                </p>
-                {assignment.availableFromDate && (
-                  <small className="text-muted">
-                    Available from {assignment.availableFromDate} until {assignment.availableUntilDate}
-                  </small>
-                )}
+      <br />
+      <br />
+      <ul id="wd-assignment-list" className="list-group rounded-0">
+        <li className="wd-assignment list-group-item p-0 mb-5 fs-5 border-gray">
+          <div className="wd-title p-3 ps-2 bg-secondary">
+            <BsGripVertical className="me-2 fs-3" />
+            Assignments
+            <div className="d-flex align-items-center float-end">
+              <div
+                className="border rounded-pill border-black fs-6"
+                style={{ paddingLeft: "4px", paddingRight: "4px" }}
+              >
+                40% of Total
               </div>
-              <div className="d-flex align-items-center">
-                <GreenCheckmark />
-                {isFaculty && (
-                  <div className="ms-3">
-                    <button
-                      className="btn btn-sm btn-warning me-2"
-                      onClick={(e) => handleEdit(e, assignment)}
-                    >
-                      <FaPencilAlt />
-                    </button>
-                    <button
-                      className="btn btn-sm btn-danger me-2"
-                      onClick={(e) => handleDelete(e, assignment._id)}
-                    >
-                      <FaTrash />
-                    </button>
-                    <FaEllipsisV className="text-secondary" />
-                  </div>
-                )}
-              </div>
+              <BsPlus className="fs-4" />
+              <IoEllipsisVertical className="fs-4" />
             </div>
-          </li>
-        ))}
+          </div>
+          <ul className="wd-lessons list-group rounded-0">
+            {assignments?.map((assignment: any) => (
+              <li className="d-flex align-items-center wd-lesson list-group-item ps-1">
+                <BsGripVertical className="me-2 fs-3" />
+                <GrDocumentText className="me-2 fs-3" />
+                <div>
+                  <a
+                    className="wd-assignment-link fs-6"
+                    href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                  >
+                    {assignment.title}
+                  </a>
+
+                  <p className="wd-assignment-text fs-6">
+                    Multiple Modules | <b>Not available until</b>{" "}
+                    {assignment.availableDate} at 12:00am |
+                    <br />
+                    <b>Due</b> {assignment.dueDate} at 11:59pm |{" "}
+                    {assignment.points}pts
+                  </p>
+                </div>
+
+                <LessonControlButtons />
+
+                <FacultyRestrictedRoute>
+                  <FaTrash
+                    className="text-danger me-2 mb-1"
+                    onClick={() => delAssignment(assignment._id)}
+                  />
+                </FacultyRestrictedRoute>
+              </li>
+            ))}
+          </ul>
+        </li>
       </ul>
     </div>
   );
