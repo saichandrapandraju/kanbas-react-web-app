@@ -1,24 +1,24 @@
-import React from "react";
-import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import Labs from "./Labs";
-import Kanbas from "./kanbas";
-import { Provider } from 'react-redux';
-import store from './store';
+import Kanbas from "./Kanbas";
+import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
+import store from "./Kanbas/store";
+import { Provider } from "react-redux";
+import Session from "./Kanbas/Account/Session";
 function App() {
   return (
-    <Provider store={store}>
-      <HashRouter>
+    <HashRouter>
+      <Provider store={store}>
+        <Session>
           <div>
             <Routes>
-              <Route path="/" element={<Navigate to="/Kanbas" />} />
+              <Route path="/" element={<Navigate to="Kanbas/" />} />
               <Route path="/Labs/*" element={<Labs />} />
               <Route path="/Kanbas/*" element={<Kanbas />} />
             </Routes>
           </div>
-        </HashRouter>
-    </Provider>
-    
+        </Session>
+      </Provider>
+    </HashRouter>
   );
 }
-
 export default App;
