@@ -9,8 +9,8 @@ const assignmentsSlice = createSlice({
   reducers: {
     addAssignment: (state, { payload: assignment }) => {
       const newAssignment: any = {
-        // _id: new Date().getTime().toString(),
-        _id: assignment._id,
+        _id: new Date().getTime().toString(),
+        // _id: assignment._id,
         title: assignment.title,
         description: assignment.description,
         course: assignment.course,

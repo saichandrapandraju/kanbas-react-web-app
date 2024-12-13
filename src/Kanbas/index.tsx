@@ -23,24 +23,24 @@ export default function Kanbas() {
   });
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   console.log(currentUser);
-  var uid = "123";
-  if (currentUser){
-    if (currentUser.username === "dark_knight") {
-      uid = "234";
-    }
-    else if (currentUser.username === "black_widow") {
-      uid = "345";
-    }
-    else if (currentUser.username === "thor_odinson") {
-      uid = "456";
-    }
-  }
+  // var uid = "123";
+  // if (currentUser){
+  //   if (currentUser.username === "dark_knight") {
+  //     uid = "234";
+  //   }
+  //   else if (currentUser.username === "black_widow") {
+  //     uid = "345";
+  //   }
+  //   else if (currentUser.username === "thor_odinson") {
+  //     uid = "456";
+  //   }
+  // }
   
 
   const [enrolling, setEnrolling] = useState<boolean>(false);
   const findCoursesForUser = async () => {
     try {
-      const courses = await userClient.findCoursesForUser(uid);
+      const courses = await userClient.findCoursesForUser(currentUser._id);
       setCourses(courses);
     } catch (error) {
       console.error(error);
@@ -48,9 +48,9 @@ export default function Kanbas() {
   };
   const updateEnrollment = async (courseId: string, enrolled: boolean) => {
     if (enrolled) {
-      await userClient.enrollIntoCourse(uid, courseId);
+      await userClient.enrollIntoCourse(currentUser._id, courseId);
     } else {
-      await userClient.unenrollFromCourse(uid, courseId);
+      await userClient.unenrollFromCourse(currentUser._id, courseId);
     }
     setCourses(
       courses.map((course) => {
@@ -67,7 +67,7 @@ export default function Kanbas() {
     try {
       const allCourses = await courseClient.fetchAllCourses();
       const enrolledCourses = await userClient.findCoursesForUser(
-        uid
+        currentUser._id
       );
       const courses = allCourses.map((course: any) => {
         if (enrolledCourses.find((c: any) => c._id === course._id)) {
@@ -108,7 +108,7 @@ export default function Kanbas() {
   };
 
   const deleteCourse = async (courseId: string) => {
-    userClient.unenrollFromCourse(uid, courseId);
+    userClient.unenrollFromCourse(currentUser._id, courseId);
     await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
   };
