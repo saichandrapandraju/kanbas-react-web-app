@@ -22,6 +22,7 @@ export default function Kanbas() {
     description: "New Description",
   });
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  console.log(currentUser);
   const [enrolling, setEnrolling] = useState<boolean>(false);
   const findCoursesForUser = async () => {
     try {
