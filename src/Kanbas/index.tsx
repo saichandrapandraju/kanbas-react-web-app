@@ -24,15 +24,18 @@ export default function Kanbas() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   console.log(currentUser);
   var uid = "123";
-  if (currentUser.username === "dark_knight") {
-    uid = "234";
+  if (currentUser){
+    if (currentUser.username === "dark_knight") {
+      uid = "234";
+    }
+    else if (currentUser.username === "black_widow") {
+      uid = "345";
+    }
+    else if (currentUser.username === "thor_odinson") {
+      uid = "456";
+    }
   }
-  else if (currentUser.username === "black_widow") {
-    uid = "345";
-  }
-  else if (currentUser.username === "thor_odinson") {
-    uid = "456";
-  }
+  
 
   const [enrolling, setEnrolling] = useState<boolean>(false);
   const findCoursesForUser = async () => {
